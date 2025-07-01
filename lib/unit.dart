@@ -45,6 +45,11 @@ class Monster extends GameUnit {
     //  몬스터의 공격력 > 캐릭터의 방어력
     //  캐릭터 방어력 or 랜덤값 중 최대값으로 설정
     //  데미지 = 몬스터의 공격력 - 캐릭터의 방어력, 최소 데미지는 0 이상
+    Random random = Random();
+    int randomAttack = random.nextInt(attackPower) + 1;
+    int damage = max(0, randomAttack - character.defensePower);
+
+    character.hp -= damage;
   }
 
   @override
