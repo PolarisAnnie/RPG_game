@@ -1,4 +1,6 @@
-/* 추상 클래스 생성 (동일한 부분 묶어서 구성)
+//추상 클래스 생성 (동일한 부분 묶어서 구성)
+import 'dart:math';
+
 abstract class GameUnit {
   String name = '';
   int hp = 0;
@@ -7,45 +9,47 @@ abstract class GameUnit {
 
   GameUnit(this.name, this.hp, this.attackPower, this.defensePower);
 
-  void attack();
   void showStatus();
 }
-*/
 
-class Character {
-  //Character(String name, int hp, int attackPower, int defensePower)
-  //: super(name, hp, attackPower, defensePower);
-  // 부모 생성자 호출해서 Character 초기화
+class Character extends GameUnit {
+  Character(super.name, super.hp, super.attackPower, super.defensePower);
+  // 부모 속성 그대로 사용(초기화)
 
-  String nickname = '';
-  int hp = 0;
-  int attackPower = 0;
-  int defensePower = 0;
-
-  //@override
-  void attack() {
+  void attack(Monster monster) {
     // 몬스터 공격
+    monster.hp -= attackPower;
+    print('$name이(가) ${monster.name}에게 $attackPower의 데미지를 입혔습니다.');
   }
 
   void defend() {
     // 방어 시 특정 행동 수행
+    Random random = Random();
+    int recovery = random.nextInt(16); // 0~15까지 랜덤으로 체력 회복
+    hp += recovery;
   }
 
-  //@override
+  @override
   void showStatus() {
-    // 몬스터 남은 체력, 공격력, 방어력 매턴 출력
-    print('$name - 체력: ${Monster.hp}, 공격력: ${Monster.attackPower}');
+    // 남은 체력, 공격력, 방어력 매턴 출력
+    print('$name - 체력 : $hp, 공격력 : $attackPower, 방어력 : $defensePower');
   }
 }
 
-class Monster {
-  //Monster(String name, int hp, int attackPower, int defensePower)
-  //: super(name, hp, attackPower, defensePower);
-  // 부모 생성자 호출해서 Monster 초기화
+class Monster extends GameUnit {
+  Monster(super.name, super.hp, super.attackPower, super.defensePower);
+  // 부모 속성 그대로 사용
 
-  //@override
-  void attack() {}
+  void attack(Character character) {
+    // 캐릭터 공격
+    //  몬스터의 공격력 > 캐릭터의 방어력
+    //  캐릭터 방어력 or 랜덤값 중 최대값으로 설정
+    //  데미지 = 몬스터의 공격력 - 캐릭터의 방어력, 최소 데미지는 0 이상
+  }
 
-  //@override
-  void showStatus() {}
+  @override
+  void showStatus() {
+    // 남은 체력, 공격력, 방어력 매턴 출력
+    print('$name - 체력 : $hp, 공격력 : $attackPower');
+  }
 }
