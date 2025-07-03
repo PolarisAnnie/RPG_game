@@ -12,9 +12,6 @@ class Game {
   // 몬스터 랜덤 뽑기를 위한 전역 변수
   Random random = Random();
 
-  // 승리 여부를 파악하는 전역 변수
-  bool isVictory = false;
-
   // 게임 시작
   Future<void> startGame() async {
     //settings.dart에서 캐릭터, 몬스터 로드
@@ -29,7 +26,7 @@ class Game {
       print('');
 
       //전투 진행
-      isVictory = battle(currentMonster);
+      bool isVictory = battle(currentMonster);
 
       if (isVictory == true) {
         // 패배한 몬스터 제거 및 물리친 몬스터 개수 추가
@@ -149,7 +146,7 @@ class Game {
         String resultContents =
             '이름 : $characterName / 남은체력 : $remainhp / 게임결과 : $gameResult';
 
-        final file = File('result.txt');
+        final file = File('assets/result.txt');
         file.writeAsStringSync(resultContents);
 
         print('게임 결과가 저장되었습니다');

@@ -64,12 +64,12 @@ Future<void> loadMonsterStatsAsync() async {
       if (line.trim().isEmpty) continue;
 
       final stats = line.split(',');
-      if (stats.length != 4) continue;
+      if (stats.length != 3) continue;
 
       String name = stats[0].trim();
       int hp = int.parse(stats[1]);
       int attackPower = int.parse(stats[2]);
-      int defensePower = int.parse(stats[3]);
+      int defensePower = 0;
       monsters.add(Monster(name, hp, attackPower, defensePower));
     }
   } catch (e) {
