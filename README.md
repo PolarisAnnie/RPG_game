@@ -4,7 +4,7 @@
 </h1>
 <p align="center">
 </p>
-![예시 화면](./assets/image.png)
+  <img alt="참고 이미지" src="https://github.com/PolarisAnnie/RPG_game/blob/main/assets/image.png">
 
 ## 프로젝트 개요
 > 콘솔 창에서 몬스터와 전투를 할 수 있는 RPG 게임입니다. 
