@@ -47,6 +47,7 @@ class Game {
           if (gameMonsters.isEmpty) {
             print('축하합니다! 모든 몬스터를 물리쳤습니다!');
             saveResult(isVictory);
+            return;
           }
 
           // 이어서 게임 진행 여부 확인, y 또는 n만 입력 가능하게
@@ -156,14 +157,7 @@ class Game {
     }
 
     int randomIndex = random.nextInt(gameMonsters.length);
-    Monster selectedMosnter = gameMonsters[randomIndex];
-
-    return Monster(
-      selectedMosnter.name,
-      selectedMosnter.hp,
-      selectedMosnter.attackPower,
-      selectedMosnter.defensePower,
-    );
+    return gameMonsters[randomIndex];
   }
 
   // 결과 저장
