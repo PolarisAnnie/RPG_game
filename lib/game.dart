@@ -12,6 +12,69 @@ class Game {
   // 몬스터 랜덤 뽑기를 위한 전역 변수
   Random random = Random();
 
+  // 승리 여부를 파악하는 전역 변수
+  bool isVictory = false;
+
+  bool battle(Monster monster) {
+    while (gameCharacter!.hp > 0 && monster.hp > 0) {
+      // 유저(캐릭터) 턴
+      print('${character!.name}님의 턴');
+      print('행동을 선택하세요. (1 : 공격, 2 : 방어)');
+      String? input = stdin.readLineSync();
+      switch (input) {
+        case '1':
+          {
+            //공격하기
+            gameCharacter!.attackMonster(monster);
+          }
+          break;
+
+        case '2':
+          {
+            //방어하기(랜덤으로 체력 회복)
+            int beforeHp = gameCharacter!.hp;
+            gameCharacter!.defend();
+            int recoverAmount = gameCharacter!.hp - beforeHp;
+            print(
+              '${gameCharacter!.name}이(가) 방어 태세를 취하여 $recoverAmount만큼 체력을 얻었습니다!',
+            );
+          }
+          break;
+
+        default:
+          {
+            print('숫자 1, 2 중 하나를 입력해주세요');
+            continue;
+          }
+      }
+
+      print('');
+
+      if (monster.hp <= 0) {
+        isVictory = true;
+        print('${gameCharacter!.name}이(가) ${monster.name}을(를) 물리쳤습니다!');
+        return isVictory; // 몬스터 체력 0 이하일 경우, 승리
+      }
+
+      print('');
+      // 몬스터의 턴
+      print('${monster.name}님의 턴');
+      monster.attackCharacter(gameCharacter!);
+
+      // 현재 상태 확인
+      gameCharacter!.showStatus();
+      monster.showStatus();
+      print('');
+
+      if (gameCharacter!.hp <= 0) {
+        isVictory = false;
+        print('${gameCharacter!.name}이(가) ${monster.name}에게 졌습니다.');
+        return isVictory; // 캐릭터 체력이 0 이하면 패배
+      }
+    }
+    return isVictory;
+  }
+
   Monster getRandomMonster() {
     if (gameMonsters.isEmpty) {
       throw Exception('더이상 대결할 몬스터가 없습니다');
