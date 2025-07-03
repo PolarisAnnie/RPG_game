@@ -15,6 +15,50 @@ class Game {
   // 승리 여부를 파악하는 전역 변수
   bool isVictory = false;
 
+  // 게임 시작
+  Future<void> startGame() async {
+    //settings.dart에서 캐릭터, 몬스터 로드
+    await loadCharacterStatsAsync();
+    await loadMonsterStatsAsync();
+
+    // 게임 시작
+    while (gameCharacter!.hp > 0 && gameMonsters.isNotEmpty) {
+      Monster currentMonster = getRandomMonster();
+      print('새로운 몬스터가 나타났습니다!');
+      currentMonster.showStatus();
+      print('');
+
+      //전투 진행
+      isVictory = battle(currentMonster);
+
+      if (isVictory == true) {
+        // 패배한 몬스터 제거 및 물리친 몬스터 개수 추가
+        gameMonsters.remove(currentMonster);
+        monsterNum++;
+
+        // 모든 몬스터 제거 여부 확인
+        if (gameMonsters.isEmpty) {
+          print('축하합니다! 모든 몬스터를 물리쳤습니다!');
+          saveResult(isVictory);
+        }
+
+        // 이어서 게임 진행 여부 확인
+        print('다음 몬스터와 싸우시겠습니까? (y/n)');
+        String? input = stdin.readLineSync();
+        if (input?.toLowerCase() != 'y') {
+          print('게임을 종료합니다.');
+          saveResult(isVictory);
+          return;
+        }
+      } else {
+        print('체력이 모두 떨어져 ${gameCharacter!.name}의 모험이 끝났습니다...');
+        saveResult(isVictory);
+        return;
+      }
+    }
+  }
+
+  // 배틀
   bool battle(Monster monster) {
     while (gameCharacter!.hp > 0 && monster.hp > 0) {
       // 유저(캐릭터) 턴
@@ -50,10 +94,10 @@ class Game {
 
       print('');
 
+      // 몬스터 체력 0 이하일 경우, 승리
       if (monster.hp <= 0) {
-        isVictory = true;
         print('${gameCharacter!.name}이(가) ${monster.name}을(를) 물리쳤습니다!');
-        return isVictory; // 몬스터 체력 0 이하일 경우, 승리
+        return true;
       }
 
       print('');
@@ -66,15 +110,16 @@ class Game {
       monster.showStatus();
       print('');
 
+      // 캐릭터 체력이 0 이하면 패배
       if (gameCharacter!.hp <= 0) {
-        isVictory = false;
         print('${gameCharacter!.name}이(가) ${monster.name}에게 졌습니다.');
-        return isVictory; // 캐릭터 체력이 0 이하면 패배
+        return false;
       }
     }
-    return isVictory;
+    throw Exception('전투 로직 오류');
   }
 
+  // 몬스터 랜덤 뽑기
   Monster getRandomMonster() {
     if (gameMonsters.isEmpty) {
       throw Exception('더이상 대결할 몬스터가 없습니다');
@@ -91,7 +136,8 @@ class Game {
     );
   }
 
-  void saveResult() {
+  // 결과 저장
+  void saveResult(isVictory) {
     print('결과를 저장하시겠습니까?(y/n) ');
     String? input = stdin.readLineSync();
     try {
