@@ -21,6 +21,12 @@ class Game {
     await loadCharacterStatsAsync();
     await loadMonsterStatsAsync();
 
+    //캐릭터 체력 증가 기능, 30% 확률로 캐릭터에게 보너스 체력 10 제공
+    if (random.nextInt(100) < 30) {
+      gameCharacter!.hp += 10;
+      print('보너스 체력을 얻었습니다! 현재 체력: ${gameCharacter!.hp}\n');
+    }
+
     // 게임 시작
     while (gameCharacter!.hp > 0 && gameMonsters.isNotEmpty) {
       Monster currentMonster = getRandomMonster();
@@ -129,6 +135,7 @@ class Game {
       monster.attackCharacter(gameCharacter!);
 
       // 현재 상태 확인
+      print('');
       gameCharacter!.showStatus();
       monster.showStatus();
       print('');
