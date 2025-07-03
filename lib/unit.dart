@@ -22,10 +22,18 @@ class Character extends GameUnit {
     print('$name이(가) ${monster.name}에게 $attackPower의 데미지를 입혔습니다.');
   }
 
+  void useAttackItem(Monster monster) {
+    // 아이템 사용(공격력 2배)
+    monster.hp -= attackPower * 2;
+    print(
+      '$name이(가) ${monster.name}에게 공격력 2배 아이템을 사용하여 ${attackPower * 2}의 데미지를 입혔습니다.',
+    );
+  }
+
   void defend() {
     // 방어 시 특정 행동 수행
     Random random = Random();
-    int recovery = random.nextInt(16); // 0~15까지 랜덤으로 체력 회복
+    int recovery = random.nextInt(6); // 0~5까지 랜덤으로 체력 회복
     hp += recovery;
   }
 

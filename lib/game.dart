@@ -12,6 +12,9 @@ class Game {
   // 몬스터 랜덤 뽑기를 위한 전역 변수
   Random random = Random();
 
+  // 아이템 1개 부여 (공격력 2배)
+  int item = 1;
+
   // 게임 시작
   Future<void> startGame() async {
     //settings.dart에서 캐릭터, 몬스터 로드
@@ -71,7 +74,7 @@ class Game {
     while (gameCharacter!.hp > 0 && monster.hp > 0) {
       // 유저(캐릭터) 턴
       print('${character!.name}님의 턴');
-      print('행동을 선택하세요. (1 : 공격, 2 : 방어)');
+      print('행동을 선택하세요. (1 : 공격, 2 : 방어, 3 : 아이템 )');
       String? input = stdin.readLineSync();
       switch (input) {
         case '1':
@@ -93,9 +96,21 @@ class Game {
           }
           break;
 
+        case '3':
+          {
+            if (item == 1) {
+              gameCharacter!.useAttackItem(monster);
+              item--; // 아이템 소멸
+            } else {
+              print('이미 아이템을 사용했습니다');
+              continue;
+            }
+          }
+          break;
+
         default:
           {
-            print('숫자 1, 2 중 하나를 입력해주세요');
+            print('숫자 1, 2, 3 중 하나를 입력해주세요');
             continue;
           }
       }
