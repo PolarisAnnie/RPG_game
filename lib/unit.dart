@@ -16,7 +16,7 @@ class Character extends GameUnit {
   Character(super.name, super.hp, super.attackPower, super.defensePower);
   // 부모 속성 그대로 사용(초기화)
 
-  void attack(Monster monster) {
+  void attackMonster(Monster monster) {
     // 몬스터 공격
     monster.hp -= attackPower;
     print('$name이(가) ${monster.name}에게 $attackPower의 데미지를 입혔습니다.');
@@ -40,7 +40,7 @@ class Monster extends GameUnit {
   Monster(super.name, super.hp, super.attackPower, super.defensePower);
   // 부모 속성 그대로 사용
 
-  void attack(Character character) {
+  void attackCharacter(Character character) {
     // 캐릭터 공격
     //  몬스터의 공격력 > 캐릭터의 방어력
     //  캐릭터 방어력 or 랜덤값 중 최대값으로 설정
