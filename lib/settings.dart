@@ -31,6 +31,7 @@ String getCharacterName() {
 Character? character; // 전역 변수로 활용해야 함
 List<Monster> monsters = [];
 
+// 캐릭터 데이터 로드
 Future<void> loadCharacterStatsAsync() async {
   try {
     final file = File('assets/characters.txt');
@@ -54,6 +55,7 @@ Future<void> loadCharacterStatsAsync() async {
   }
 }
 
+// 몬스터 데이터 로드
 Future<void> loadMonsterStatsAsync() async {
   try {
     final file = File('assets/monsters.txt');

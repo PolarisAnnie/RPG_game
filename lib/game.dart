@@ -32,7 +32,6 @@ class Game {
       Monster currentMonster = getRandomMonster();
       print('새로운 몬스터가 나타났습니다!');
       currentMonster.showStatus();
-      print('');
 
       //전투 진행
       bool isVictory = battle(currentMonster);
@@ -78,9 +77,11 @@ class Game {
 
   // 배틀
   bool battle(Monster monster) {
+    int turnCount = 0; // 몬스터 방어력 증가 기능을 위한 카운터
+
     while (gameCharacter!.hp > 0 && monster.hp > 0) {
       // 유저(캐릭터) 턴
-      print('${character!.name}님의 턴');
+      print('\n${character!.name}님의 턴');
       print('행동을 선택하세요. (1 : 공격, 2 : 방어, 3 : 아이템 )');
       String? input = stdin.readLineSync();
       switch (input) {
@@ -122,18 +123,24 @@ class Game {
           }
       }
 
-      print('');
-
       // 몬스터 체력 0 이하일 경우, 승리
       if (monster.hp <= 0) {
-        print('${gameCharacter!.name}이(가) ${monster.name}을(를) 물리쳤습니다!');
+        print('\n${gameCharacter!.name}이(가) ${monster.name}을(를) 물리쳤습니다!\n');
         return true;
       }
 
-      print('');
       // 몬스터의 턴
-      print('${monster.name}님의 턴');
+      print('\n${monster.name}님의 턴');
       monster.attackCharacter(gameCharacter!);
+      turnCount++;
+
+      if (turnCount == 3) {
+        monster.defensePower += 2;
+        print(
+          '\n${monster.name}의 방어력이 증가했습니다! 현재 방어력: ${monster.defensePower}\n',
+        );
+        turnCount = 0;
+      }
 
       // 현재 상태 확인
       print('');
