@@ -17,6 +17,7 @@ String getCharacterName() {
 
     if (result == true) {
       print('게임을 시작합니다!');
+      character!.showStatus(); // 캐릭터 현재 상태
       return name;
     } else {
       print('다시 입력하세요. 이름은 한글과 영문 대소문자로만 구성되어야 합니다.');
@@ -29,7 +30,7 @@ String getCharacterName() {
 }
 
 Character? character; // 전역 변수로 활용해야 함
-Monster? monster;
+List<Monster> monsters = [];
 
 Future<void> loadCharacterStatsAsync() async {
   try {
@@ -54,15 +55,20 @@ Future<void> loadMonsterStatsAsync() async {
   try {
     final file = File('monsters.txt');
     final contents = await file.readAsString();
-    final stats = contents.split(',');
-    if (stats.length != 4) throw FormatException('Invalid monster data');
+    final lines = contents.split('\n');
 
-    String name = stats[0];
-    int hp = int.parse(stats[1]);
-    int attackPower = int.parse(stats[2]);
-    int defensePower = int.parse(stats[3]);
+    for (String line in lines) {
+      if (lines.trim().isEmpty) continue;
 
-    monster = Monster(name, hp, attackPower, defensePower);
+      final stats = line.split(',');
+      if (stats.length != 4) continue;
+
+      String name = stats[0].trim();
+      int hp = int.parse(stats[1]);
+      int attackPower = int.parse(stats[2]);
+      int defensePower = int.parse(stats[3]);
+      monsters.add(Monster(name, hp, attackPower, defensePower));
+    }
   } catch (e) {
     print('몬스터 데이터를 불러오는 데 실패했습니다: $e');
     exit(1);

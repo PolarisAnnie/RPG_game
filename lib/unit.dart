@@ -50,6 +50,7 @@ class Monster extends GameUnit {
     int damage = max(0, randomAttack - character.defensePower);
 
     character.hp -= damage;
+    print('$name이(가) ${character.name}에게 $damage의 데미지를 입혔습니다.');
   }
 
   @override
