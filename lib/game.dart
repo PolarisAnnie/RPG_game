@@ -34,18 +34,29 @@ class Game {
         monsterNum++;
 
         // 모든 몬스터 제거 여부 확인
-        if (gameMonsters.isEmpty) {
-          print('축하합니다! 모든 몬스터를 물리쳤습니다!');
-          saveResult(isVictory);
-        }
+        try {
+          if (gameMonsters.isEmpty) {
+            print('축하합니다! 모든 몬스터를 물리쳤습니다!');
+            saveResult(isVictory);
+          }
 
-        // 이어서 게임 진행 여부 확인
-        print('다음 몬스터와 싸우시겠습니까? (y/n)');
-        String? input = stdin.readLineSync();
-        if (input?.toLowerCase() != 'y') {
-          print('게임을 종료합니다.');
-          saveResult(isVictory);
-          return;
+          // 이어서 게임 진행 여부 확인, y 또는 n만 입력 가능하게
+          while (true) {
+            print('다음 몬스터와 싸우시겠습니까? (y/n)');
+            String? input = stdin.readLineSync();
+
+            if (input?.toLowerCase() == 'n') {
+              print('게임을 종료합니다.');
+              saveResult(isVictory);
+              return;
+            } else if (input?.toLowerCase() == 'y') {
+              break;
+            } else {
+              print('y 또는 n을 입력해주세요.');
+            }
+          }
+        } catch (e) {
+          print(e);
         }
       } else {
         print('체력이 모두 떨어져 ${gameCharacter!.name}의 모험이 끝났습니다...');
@@ -150,9 +161,12 @@ class Game {
         file.writeAsStringSync(resultContents);
 
         print('게임 결과가 저장되었습니다');
-      } else {
+      } else if (input?.toLowerCase() == 'n') {
         print('결과를 저장하지 않고 게임을 종료합니다');
         exit;
+      } else {
+        print('y 또는 n을 입력해주세요.');
+        saveResult(isVictory);
       }
     } catch (e) {
       print('파일 저장 중 오류가 발생했습니다: $e');
